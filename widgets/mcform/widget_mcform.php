@@ -36,6 +36,48 @@ function nxs_widgets_mcform_home_getoptions($args)
 		),
 		"fields" => array
 		(
+			// TITLE
+			
+			array( 
+				"id" 				=> "wrapper_title_begin",
+				"type" 				=> "wrapperbegin",
+				"label" 			=> nxs_l18n__("Title", "nxs_td")
+			),
+			
+			array( 			
+				"id" 				=> "title",
+				"type" 				=> "input",
+				"label" 			=> nxs_l18n__("Title", "nxs_td"),
+				"tooltip"			=> nxs_l18n__("If you want to give the entire widget a title, you can use this option.", "nxs_td"),
+				"unicontentablefield" => true,
+			),	
+			array(
+				"id" 				=> "title_heading",
+				"type" 				=> "select",
+				"label" 			=> nxs_l18n__("Title importance", "nxs_td"),
+				"dropdown" 			=> nxs_style_getdropdownitems("title_heading"),
+				"unistylablefield"	=> true
+			),
+			array(
+				"id" 				=> "title_fontsize",
+				"type" 				=> "select",
+				"label" 			=> nxs_l18n__("Override title fontsize", "nxs_td"),
+				"dropdown" 			=> nxs_style_getdropdownitems("fontsize"),
+				"unistylablefield"	=> true
+			),	
+			array(
+				"id" 				=> "title_alignment",
+				"type" 				=> "radiobuttons",
+				"subtype" 			=> "halign",
+				"label" 			=> nxs_l18n__("Title alignment", "nxs_td"),
+				"unistylablefield"	=> true
+			),
+					
+			array( 
+				"id" 				=> "wrapper_title_end",
+				"type" 				=> "wrapperend"
+			),
+
 			// BUTTON
 			array( 
 				"id" 				=> "wrapper_button_begin",
@@ -176,6 +218,24 @@ function nxs_widgets_mcform_render_webpart_render_htmlvisualization($args)
 	}
 	*/
 	
+
+	// Title fontsize
+	$title_fontsize_cssclass = nxs_getcssclassesforlookup("nxs-head-fontsize-", $title_fontsize);
+	
+	// Title alignment
+	$title_alignment_cssclass = nxs_getcssclassesforlookup("nxs-align-", $title_alignment);
+	
+	// Title heading
+	if ($title_heading != "") {
+		$headingelement = "h" . $title_heading;	
+	} else {
+		$headingelement = "h1";
+	}
+	
+	if ($title != "") { $title = '<'.$headingelement.' class="nxs-title '.$title_fontsize_cssclass.' '.$title_alignment_cssclass.'">' . $title . '</' . $headingelement . '>'; }
+	
+
+
 	/* OUTPUT
 	---------------------------------------------------------------------------------------------------- */
 	
@@ -187,6 +247,7 @@ function nxs_widgets_mcform_render_webpart_render_htmlvisualization($args)
 	{
 		$htmlcustom = "[mc4wp_form]";
 		echo "<div class='nxs-form nxs-default-p nxs-padding-bottom0'>";
+		echo $title;
 		$html = do_shortcode($htmlcustom);
 		echo $html;
 		echo "</div>";
